@@ -1,11 +1,11 @@
 package pl.javaskills.creditapp.core.model;
 
 public enum MaritalStatus {
+    SINGLE,
+    MARRIED(100),
     DIVORCED,
     SEPARATED(100),
-    SINGLE,
-    WIDOWED,
-    MARRIED(100);
+    WIDOWED;
 
     private int scoringPoints;
 

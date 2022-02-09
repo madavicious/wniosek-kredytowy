@@ -19,8 +19,19 @@ public class ConsoleReader {
         System.out.println("Enter your mother's maiden name:");
         String mothersMaidenName = in.next();
 
-        System.out.println("Enter total monthly income in PLN:");
-        double totalMonthlyIncomeInPln = in.nextDouble();
+        System.out.println("How many sources of income do you have?:");
+        int numOfSourcesOfIncome = in.nextInt();
+
+        SourceOfIncome[] sourcesOfIncome = new SourceOfIncome[numOfSourcesOfIncome];
+        for(int i = 1; i <= numOfSourcesOfIncome; i++) {
+            System.out.println("Enter type of source of income " + i + " (EMPLOYMENT_CONTRACT, SELF_EMPLOYMENT, RETIREMENT");
+            IncomeType incomeType = IncomeType.valueOf(in.next());
+            System.out.println("Enter net monthly income of source of income " + i);
+            double netMonthlyIncome = in.nextDouble();
+
+            SourceOfIncome sourceOfIncome = new SourceOfIncome(incomeType, netMonthlyIncome);
+            sourcesOfIncome[i-1] = sourceOfIncome;
+        }
 
         System.out.println("What is your material status? (SINGLE, MARRIED, DIVORCED, WIDOWED, SEPARATED)");
         MaritalStatus maritalStatus = MaritalStatus.valueOf(in.next());
@@ -46,10 +57,11 @@ public class ConsoleReader {
         System.out.println("Enter loan period (in years):");
         byte period = in.nextByte();
 
-        PersonalData personalData = new PersonalData(name, lastName, mothersMaidenName, totalMonthlyIncomeInPln, maritalStatus, education, numOfFamilyDependants);
+        PersonalData personalData = new PersonalData(name, lastName, mothersMaidenName, maritalStatus, education, numOfFamilyDependants);
         ContactData contactData = new ContactData(email, phoneNumber);
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(purposeOfLoanType, amount, period);
-        Person person = new Person(personalData, contactData);
+        FinanceData financeData = new FinanceData(sourcesOfIncome);
+        Person person = new Person(personalData, financeData, contactData);
 
         return new LoanApplication(person, purposeOfLoan);
     }

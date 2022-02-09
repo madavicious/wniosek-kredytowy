@@ -1,12 +1,12 @@
 package pl.javaskills.creditapp.core.model;
 
 public enum Education {
+    NONE(-200),
     PRIMARY(-100),
-    MIDDLE,
-    SECONDARY,
-    POST_SECONDARY,
-    TERTIARY(100),
-    NONE(-200);
+    MIDDLE(),
+    SECONDARY(),
+    POST_SECONDARY(),
+    TERTIARY(100);
 
     private int scoringPoints;
 

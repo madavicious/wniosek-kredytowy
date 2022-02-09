@@ -1,52 +1,49 @@
 package pl.javaskills.creditapp.core;
 
-import org.junit.Assert;
-import org.junit.Test;
-import pl.javaskills.creditapp.core.PersonScoringCalculator;
-import pl.javaskills.creditapp.core.model.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import pl.javaskills.creditapp.core.model.Person;
+import pl.javaskills.creditapp.core.model.PersonTestFactory;
+import pl.javaskills.creditapp.core.scoring.EducationCalculator;
+import pl.javaskills.creditapp.core.scoring.IncomeCalculator;
+import pl.javaskills.creditapp.core.scoring.MaritalStatusCalculator;
 
-import static pl.javaskills.creditapp.core.model.Education.*;
-import static pl.javaskills.creditapp.core.model.MaritalStatus.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
 
-public class PersonScoringCalculatorTest {
+@ExtendWith(MockitoExtension.class)
+class PersonScoringCalculatorTest {
 
-    private PersonScoringCalculator cut = new PersonScoringCalculator();
+    @InjectMocks
+    private PersonScoringCalculator cut;
+
+    @Mock
+    private EducationCalculator educationCalculatorMock;
+    @Mock
+    private MaritalStatusCalculator maritalStatusCalculatorMock;
+    @Mock
+    private IncomeCalculator incomeCalculatorMock;
+
     @Test
+    @DisplayName("should return sum of calculations")
     public void test1() {
-        int totalMonthlyIncomeInPln = 5000;
-        int numOfDependants = 2;
-        Education education = PRIMARY;
-        MaritalStatus maritalStatus = MARRIED;
-        PersonalData personalData = new PersonalData(null,null, null, totalMonthlyIncomeInPln, maritalStatus, education, numOfDependants);
-        ContactData contactData = new ContactData(null, null);
-        Person person = new Person(personalData, contactData);
-        int result = cut.calculate(person);
-        Assert.assertEquals(200, result);
-    }
+        //given
+        Person person = PersonTestFactory.create();
+        BDDMockito.given(educationCalculatorMock.calculate(eq(person)))
+                .willReturn(100);
+        BDDMockito.given(maritalStatusCalculatorMock.calculate(eq(person)))
+                .willReturn(200);
+        BDDMockito.given(incomeCalculatorMock.calculate(eq(person)))
+                .willReturn(50);
+        //when
+        int scoring = cut.calculate(person);
+        //then
+        assertEquals(350, scoring);
 
-    @Test
-    public void test2() {
-        int totalMonthlyIncomeInPln = 5500;
-        int numOfDependants = 1;
-        Education education = MIDDLE;
-        MaritalStatus maritalStatus = DIVORCED;
-        PersonalData personalData = new PersonalData(null,null, null, totalMonthlyIncomeInPln, maritalStatus, education, numOfDependants);
-        ContactData contactData = new ContactData(null, null);
-        Person person = new Person(personalData, contactData);
-        int result = cut.calculate(person);
-        Assert.assertEquals(500, result);
-    }
-
-    @Test
-    public void test3() {
-        int totalMonthlyIncomeInPln = 9000;
-        int numOfDependants = 3;
-        Education education = NONE;
-        MaritalStatus maritalStatus = SINGLE;
-        PersonalData personalData = new PersonalData(null,null, null, totalMonthlyIncomeInPln, maritalStatus, education, numOfDependants);
-        ContactData contactData = new ContactData(null, null);
-        Person person = new Person(personalData, contactData);
-        int result = cut.calculate(person);
-        Assert.assertEquals(100, result);
     }
 }

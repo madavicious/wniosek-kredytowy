@@ -6,11 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.javaskills.creditapp.core.*;
+import pl.javaskills.creditapp.core.model.CreditApplicationTestFactory;
 import pl.javaskills.creditapp.core.model.LoanApplication;
-import pl.javaskills.creditapp.core.model.PurposeOfLoanType;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;

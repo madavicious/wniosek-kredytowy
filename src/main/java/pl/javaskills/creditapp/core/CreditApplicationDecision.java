@@ -1,7 +1,5 @@
 package pl.javaskills.creditapp.core;
 
-import pl.javaskills.creditapp.core.model.LoanApplication;
-import pl.javaskills.creditapp.core.model.Person;
 import pl.javaskills.creditapp.core.model.PersonalData;
 
 import java.math.BigDecimal;
@@ -17,18 +15,19 @@ public class CreditApplicationDecision {
         this.creditRate = creditRate;
     }
 
-    public String getDecisionString() {
-        BigDecimal roundedCreditRate = new BigDecimal(creditRate).setScale(2);
-        switch (type) {
+    public String getDecisionString(){
+        switch (type){
             case POSITIVE:
-                return "Congratulation, " + personalData.getName() + " " + personalData.getLastName() + ", decision is positive.";
-            case NEGATIVE_RATING:
-                return "Sorry, " + personalData.getName() + " " + personalData.getLastName() + " decision is negative. Bank can borrow only " + roundedCreditRate;
+                return "Congratulations " + personalData.getName() + " " + personalData.getLastName() + ", decision is positive";
             case NEGATIVE_SCORING:
-                return "Sorry, " + personalData.getName() + " " + personalData.getLastName() + " decision is negative.";
+                return "Sorry " + personalData.getName() + " " + personalData.getLastName() + ", decision is negative";
             case CONTACT_REQUIRED:
-                return "Sorry, " + personalData.getName() + " " + personalData.getLastName() + ", bank requires additional documents. Our consultant will contact you.";
+                return "Sorry " + personalData.getName() + " " + personalData.getLastName() + ",  bank requires additional documents. Our Consultant will contact you.";
+            case NEGATIVE_RATING:
+                BigDecimal roundedCreditRate = new BigDecimal(creditRate).setScale(2);
+                return "Sorry, " + personalData.getName() + " " + personalData.getLastName() + ", decision is negative. Bank can borrow only " + roundedCreditRate;
         }
+
         return null;
     }
 
