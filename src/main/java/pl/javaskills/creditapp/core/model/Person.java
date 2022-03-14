@@ -1,11 +1,11 @@
 package pl.javaskills.creditapp.core.model;
 
-public class Person {
+public abstract class Person {
     private final PersonalData personalData;
     private final FinanceData financeData;
     private final ContactData contactData;
 
-    public Person(PersonalData personalData, FinanceData financeData, ContactData contactData) {
+    protected Person(PersonalData personalData, FinanceData financeData, ContactData contactData) {
         this.personalData = personalData;
         this.financeData = financeData;
         this.contactData = contactData;
@@ -22,6 +22,8 @@ public class Person {
     public FinanceData getFinanceData() {
         return financeData;
     }
+
+
 
     public double getIncomePerFamilyMember(){
         double totalMonthlyIncome = 0;

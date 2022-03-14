@@ -8,14 +8,17 @@ import pl.javaskills.creditapp.core.model.Person;
 
 import java.util.UUID;
 
+import static pl.javaskills.creditapp.core.DecisionType.*;
+import static pl.javaskills.creditapp.core.model.Constants.MIN_LOAN_AMOUNT_MORTGAGE;
+
 public class CreditApplicationService {
     private final Logger log = LoggerFactory.getLogger(CreditApplicationService.class);
 
-    private final PersonScoringCalculator personScoringCalculator;
+    private final PersonScoringCalculatorFactory personScoringCalculatorFactory;
     private  final CreditRatingCalculator creditRatingCalculator;
 
-    public CreditApplicationService(PersonScoringCalculator personScoringCalculator, CreditRatingCalculator creditRatingCalculator) {
-        this.personScoringCalculator = personScoringCalculator;
+    public CreditApplicationService(PersonScoringCalculatorFactory personScoringCalculatorFactory, CreditRatingCalculator creditRatingCalculator) {
+        this.personScoringCalculatorFactory = personScoringCalculatorFactory;
         this.creditRatingCalculator = creditRatingCalculator;
     }
 
@@ -24,19 +27,25 @@ public class CreditApplicationService {
         String id = UUID.randomUUID().toString();
         log.info("Application id is " + id);
         MDC.put("id", id);
+
         Person person = loanApplication.getPerson();
+        int scoring = personScoringCalculatorFactory.getCalculator(person).calculate(person);
         CreditApplicationDecision decision;
-        if (personScoringCalculator.calculate(person) < 300) {
-            decision = new CreditApplicationDecision(DecisionType.NEGATIVE_SCORING, loanApplication.getPerson().getPersonalData(), null);
-        } else if (personScoringCalculator.calculate(person) >= 300 && personScoringCalculator.calculate(loanApplication.getPerson()) <= 400) {
-            decision = new CreditApplicationDecision(DecisionType.CONTACT_REQUIRED, loanApplication.getPerson().getPersonalData(), null);
+        if (scoring < 300) {
+            decision = new CreditApplicationDecision(NEGATIVE_SCORING, loanApplication.getPerson().getPersonalData(), null, scoring);
+        } else if (scoring >= 300 && scoring <= 400) {
+            decision = new CreditApplicationDecision(CONTACT_REQUIRED, loanApplication.getPerson().getPersonalData(), null, scoring);
         }
         else {
             double creditRate = creditRatingCalculator.calculaate(loanApplication);
             if (creditRate >= loanApplication.getPurposeOfLoan().getAmount()) {
-                decision = new CreditApplicationDecision(DecisionType.POSITIVE, loanApplication.getPerson().getPersonalData(), creditRate);
+                if (loanApplication.getPurposeOfLoan().getAmount() < MIN_LOAN_AMOUNT_MORTGAGE) {
+                    decision = new CreditApplicationDecision(NEGATIVE_REQUIREMENTS_NOT_MET, loanApplication.getPerson().getPersonalData(), creditRate, scoring);
+                } else {
+                    decision = new CreditApplicationDecision(POSITIVE, loanApplication.getPerson().getPersonalData(), creditRate, scoring);
+                }
             }else{
-                decision = new CreditApplicationDecision(DecisionType.NEGATIVE_RATING, loanApplication.getPerson().getPersonalData(), creditRate);
+                decision = new CreditApplicationDecision(NEGATIVE_RATING, loanApplication.getPerson().getPersonalData(), creditRate, scoring);
             }
 
         }
