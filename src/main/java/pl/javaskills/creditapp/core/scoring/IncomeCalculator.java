@@ -13,9 +13,9 @@ public class IncomeCalculator implements PersonCalculator{
         int pointsForIncome = (int) (incomePerFamilyMember / 1000) * 100;
         log.info("Income per family member = " + incomePerFamilyMember + ScoringUtils.getPointsString(pointsForIncome));
 
-        if(person.getFinanceData().getSourcesOfIncome().length > 1) {
+        if(person.getFinanceData().getSourcesOfIncome().size() > 1) {
             pointsForIncome += 100;
-            log.info("Extra points for " + person.getFinanceData().getSourcesOfIncome().length + " sources of income." + ScoringUtils.getPointsString(100));
+            log.info("Extra points for " + person.getFinanceData().getSourcesOfIncome().size() + " sources of income." + ScoringUtils.getPointsString(100));
         }
 
         return pointsForIncome;

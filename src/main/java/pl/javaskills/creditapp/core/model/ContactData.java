@@ -8,7 +8,7 @@ public class ContactData {
     private Address homeAddress;
     private Optional<Address> correspondenceAddress;
 
-    private ContactData(String email, String phoneNumber, Address homeAddress, Optional<Address> correspondenceAddress) {
+    public ContactData(String email, String phoneNumber, Address homeAddress, Optional<Address> correspondenceAddress) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.homeAddress = homeAddress;

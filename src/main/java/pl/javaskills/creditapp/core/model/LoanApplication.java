@@ -1,37 +1,24 @@
 package pl.javaskills.creditapp.core.model;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public class LoanApplication {
-    private final Optional<NaturalPerson> naturalPerson;
-    private final Optional<SelfEmployed> selfEmployed;
+    private final UUID id;
+    private final Person person;
     private final PurposeOfLoan purposeOfLoan;
 
-    public LoanApplication(NaturalPerson person, PurposeOfLoan purposeOfLoan) {
-        this.naturalPerson = Optional.of(person);
-        this.selfEmployed = Optional.empty();
+    public LoanApplication(Person person, PurposeOfLoan purposeOfLoan) {
+        this.person = person;
         this.purposeOfLoan = purposeOfLoan;
+        this.id = UUID.randomUUID();
     }
 
-    public LoanApplication(SelfEmployed person, PurposeOfLoan purposeOfLoan) {
-        this.selfEmployed = Optional.of(person);
-        this.naturalPerson = Optional.empty();
-        this.purposeOfLoan = purposeOfLoan;
-    }
-
-    public Optional<NaturalPerson> getNaturalPerson() {
-        return naturalPerson;
-    }
-
-    public Optional<SelfEmployed> getSelfEmployed() {
-        return selfEmployed;
+    public UUID getId() {
+        return id;
     }
 
     public Person getPerson() {
-        if(naturalPerson.isPresent()) {
-            return naturalPerson.get();
-        }
-        return selfEmployed.get();
+        return person;
     }
 
     public PurposeOfLoan getPurposeOfLoan() {

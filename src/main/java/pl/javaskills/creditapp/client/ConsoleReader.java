@@ -7,9 +7,10 @@ import java.util.Scanner;
 
 
 
-public class ConsoleReader {
+public class ConsoleReader implements CreditAplicationReader{
 
-    public LoanApplication readInputParameters() {
+    @Override
+    public LoanApplication read() {
         Scanner in = new Scanner(System.in);
         String name = getName(in);
         String lastName = getLastName(in);
@@ -32,7 +33,6 @@ public class ConsoleReader {
                 .withMothersMaidenName(mothersMaidenName)
                 .withEducation(education)
                 .withMaritalStatus(maritalStatus)
-                .withNumOfDependants(numOfFamilyDependants)
                 .build();
         ContactData contactData = ContactData.Builder.create()
                 .withEmail(email)
@@ -48,7 +48,6 @@ public class ConsoleReader {
                         .withMothersMaidenName(mothersMaidenName)
                         .withEducation(education)
                         .withMaritalStatus(maritalStatus)
-                        .withNumOfDependants(numOfFamilyDependants)
                         .build())
                 .withContactData(contactData)
                 .withFinanceData(financeData)

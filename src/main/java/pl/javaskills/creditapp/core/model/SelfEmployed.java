@@ -1,19 +1,29 @@
 package pl.javaskills.creditapp.core.model;
 
+import java.util.List;
+
 public class SelfEmployed extends Person{
     private final String nip;
     private final String regon;
     private final int yearsSinceFounded;
+    private final List<FamilyMember> familyMemberList;
 
-    private SelfEmployed(String nip, String regon, PersonalData personalData, FinanceData financeData, ContactData contactData, int yearsSinceFounded) {
-        super(personalData, financeData, contactData);
+    private SelfEmployed(String nip, String regon, PersonalData personalData, FinanceData financeData,
+                         ContactData contactData, int yearsSinceFounded, List<FamilyMember> familyMemberList) {
+        super(personalData, financeData, contactData, familyMemberList);
         this.nip = nip;
         this.regon = regon;
         this.yearsSinceFounded = yearsSinceFounded;
+        this.familyMemberList = familyMemberList;
     }
 
     public int getYearsSinceFounded() {
         return yearsSinceFounded;
+    }
+
+    @Override
+    public List<FamilyMember> getFamilyMemberList() {
+        return familyMemberList;
     }
 
     public static class Builder {
@@ -23,6 +33,7 @@ public class SelfEmployed extends Person{
         private String nip;
         private String regon;
         private int yearsSinceFounded;
+        private List<FamilyMember> familyMemberList;
 
         private Builder(){}
 
@@ -59,8 +70,14 @@ public class SelfEmployed extends Person{
             return this;
         }
 
+        public Builder withFamilyMembers(List<FamilyMember> familyMemberList){
+            this.familyMemberList = familyMemberList;
+            return this;
+        }
+
         public SelfEmployed build(){
-            return new SelfEmployed(nip, regon, personalData, financeData, contactData, yearsSinceFounded);
+            return new SelfEmployed(nip, regon, personalData, financeData,
+                    contactData, yearsSinceFounded, familyMemberList);
         }
     }
 }
