@@ -1,7 +1,11 @@
 package pl.javaskills.creditapp.core.model;
 
+import pl.javaskills.creditapp.core.annotation.ExacltyOneNotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@ExacltyOneNotNull({"nip", "regon"})
 public class SelfEmployed extends Person{
     private final String nip;
     private final String regon;
@@ -33,7 +37,7 @@ public class SelfEmployed extends Person{
         private String nip;
         private String regon;
         private int yearsSinceFounded;
-        private List<FamilyMember> familyMemberList;
+        private List<FamilyMember> familyMemberList = new ArrayList<>();
 
         private Builder(){}
 

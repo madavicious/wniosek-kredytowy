@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class CreditRatingCalculator {
     private static final Logger log = LoggerFactory.getLogger(CreditRatingCalculator.class);
 
-    public double calculaate(LoanApplication loanApplication) {
+    public double calculate(LoanApplication loanApplication) {
         Person person = loanApplication.getPerson();
         double creditRate = person.getIncomePerFamilyMember() * 12 * loanApplication.getPurposeOfLoan().getPeriod();
         switch (loanApplication.getPurposeOfLoan().getPurposeOfLoanType()) {

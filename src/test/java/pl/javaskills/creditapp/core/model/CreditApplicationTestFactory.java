@@ -1,6 +1,12 @@
 package pl.javaskills.creditapp.core.model;
 
+import java.util.Set;
+
 public class CreditApplicationTestFactory {
+
+    public static LoanApplication create(NaturalPerson person, PurposeOfLoan purposeOfLoan, Set<Guarantor> guarantors){
+        return new LoanApplication(person, purposeOfLoan, guarantors);
+    }
 
     public static LoanApplication create(NaturalPerson person, PurposeOfLoan purposeOfLoan){
         return new LoanApplication(person, purposeOfLoan);

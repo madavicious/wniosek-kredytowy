@@ -7,7 +7,7 @@ import pl.javaskills.creditapp.core.model.Person;
 
 
 
-public class EducationCalculator implements PersonCalculator{
+public class EducationCalculator implements ScoringCalculator {
     private static final Logger log = LoggerFactory.getLogger(EducationCalculator.class);
 
     @Override

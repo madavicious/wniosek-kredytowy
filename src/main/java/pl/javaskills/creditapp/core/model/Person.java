@@ -1,13 +1,26 @@
 package pl.javaskills.creditapp.core.model;
 
+import pl.javaskills.creditapp.core.annotation.NotNull;
+import pl.javaskills.creditapp.core.annotation.ValidateCollection;
+import pl.javaskills.creditapp.core.annotation.ValidateObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class Person{
+
+    @NotNull
+    @ValidateObject
     private final PersonalData personalData;
+    @NotNull
+    @ValidateObject
     private final FinanceData financeData;
+    @NotNull
+    @ValidateObject
     private final ContactData contactData;
+    @NotNull
+    @ValidateCollection
     private final List<FamilyMember> familyMemberList;
 
     protected Person(PersonalData personalData, FinanceData financeData, ContactData contactData, List<FamilyMember> familyMemberList) {
@@ -40,13 +53,22 @@ public abstract class Person{
         return 1 + this.familyMemberList.size();
     }
 
-
-    public double getIncomePerFamilyMember(){
+    public double getBalance(){
         double totalMonthlyIncome = 0;
         for (SourceOfIncome sourceOfIncome : financeData.getSourcesOfIncome()) {
             totalMonthlyIncome += sourceOfIncome.getNetMonthlyIncome();
         }
-        return totalMonthlyIncome / this.getNumOfDependants();
+
+        double totalExpenses = 0;
+        for (Expense expense : financeData.getExpenses()) {
+            totalExpenses += expense.getAmount();
+        }
+
+        return totalMonthlyIncome - totalExpenses;
+    }
+
+    public double getIncomePerFamilyMember(){
+        return getBalance() / this.getNumOfDependants();
     }
 
     public List<FamilyMember> getFamilyMemberList() {

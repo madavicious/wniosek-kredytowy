@@ -1,10 +1,22 @@
 package pl.javaskills.creditapp.core.model;
 
+import pl.javaskills.creditapp.core.annotation.NotNull;
+import pl.javaskills.creditapp.core.annotation.Regex;
+
 public class PersonalData {
+
+    @NotNull
+    @Regex(Constants.NAME_REGEX)
     private final String name;
+    @NotNull
+    @Regex(Constants.LAST_NAME_REGEX)
     private final String lastName;
+    @NotNull
+    @Regex(Constants.LAST_NAME_REGEX)
     private final String mothersMaidenName;
+    @NotNull
     private final MaritalStatus maritalStatus;
+    @NotNull
     private final Education education;
 
     private PersonalData(String name, String lastName, String mothersMaidenName, MaritalStatus maritalStatus, Education education) {

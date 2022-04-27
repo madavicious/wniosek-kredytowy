@@ -1,8 +1,15 @@
 package pl.javaskills.creditapp.core.model;
 
+import pl.javaskills.creditapp.core.annotation.NotNull;
+import pl.javaskills.creditapp.core.annotation.Regex;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class NaturalPerson extends Person{
+
+    @NotNull
+    @Regex(Constants.PESEL_REGEX)
     private final String pesel;
 
     private NaturalPerson(String pesel, PersonalData personalData, ContactData contactData, FinanceData financeData, List<FamilyMember> familyMemberList) {
@@ -15,7 +22,7 @@ public class NaturalPerson extends Person{
         private ContactData contactData;
         private FinanceData financeData;
         private String pesel;
-        private List<FamilyMember> familyMemberList;
+        private List<FamilyMember> familyMemberList = new ArrayList<>();
 
         private Builder(){}
 

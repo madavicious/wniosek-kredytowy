@@ -1,9 +1,15 @@
 package pl.javaskills.creditapp.core.model;
 
 import org.jetbrains.annotations.NotNull;
+import pl.javaskills.creditapp.core.annotation.Regex;
 
 public class FamilyMember implements Comparable<FamilyMember>{
+
+    @NotNull
+    @Regex(Constants.NAME_REGEX)
     private final String name;
+
+    @NotNull
     private final Integer age;
 
     public FamilyMember(String name, Integer age) {
