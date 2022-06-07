@@ -1,18 +1,21 @@
 package pl.javaskills.creditapp.client;
 
 import pl.javaskills.creditapp.core.model.*;
+import pl.javaskills.creditapp.util.AgeUtils;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class DummyCreditApplicationReader implements CreditAplicationReader{
         
     @Override
     public LoanApplication read(){
-        final FamilyMember john = new FamilyMember("John", 18);
-        final FamilyMember jane = new FamilyMember("Jane", 40);
-        final FamilyMember susie = new FamilyMember("Susie", 5);
+        final FamilyMember john = new FamilyMember("John", AgeUtils.generateBirthDate(18));
+        final FamilyMember jane = new FamilyMember("Jane", AgeUtils.generateBirthDate(40));
+        final FamilyMember susie = new FamilyMember("Susie", AgeUtils.generateBirthDate(5));
         List<FamilyMember> familyMemberList = Arrays.asList(john, jane, susie);
         NaturalPerson person = NaturalPerson.Builder.create()
                 .withPesel("12345123451")
@@ -33,9 +36,9 @@ public class DummyCreditApplicationReader implements CreditAplicationReader{
                 .withFinanceData(new FinanceData(new SourceOfIncome(IncomeType.SELF_EMPLOYMENT, 10000)))
                 .build();
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(PurposeOfLoanType.MORTGAGE, 50000, 30);
-        Set<Guarantor> guarantorSet = Set.of(new Guarantor("12312312312", 18), new Guarantor("22312312312", 41));
-        LoanApplication loanApplication = new LoanApplication(person, purposeOfLoan, guarantorSet);
+        Set<Guarantor> guarantorSet = Set.of(new Guarantor("12312312312", AgeUtils.generateBirthDate(18)), new Guarantor("22312312312", AgeUtils.generateBirthDate(41)));
+        LoanApplication creditApplication = new LoanApplication(new Locale("pl", "PL"), ZoneId.of("Europe/Warsaw"), person, purposeOfLoan, guarantorSet);
 
-        return loanApplication;
+        return creditApplication;
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IncomeCalculatorTest {
 
-    private IncomeCalculator cut = new IncomeCalculator();
+    private final IncomeCalculator cut = new IncomeCalculator();
 
     @Test
     @DisplayName("should return 100 points for each 1000 zl for family member")

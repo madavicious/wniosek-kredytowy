@@ -1,6 +1,6 @@
 package pl.javaskills.creditapp.client;
 
-import pl.javaskills.creditapp.core.model.Constants;
+import pl.javaskills.creditapp.core.Constants;
 
 public class NumberValidator {
 

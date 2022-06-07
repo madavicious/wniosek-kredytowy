@@ -1,27 +1,36 @@
 package pl.javaskills.creditapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.javaskills.creditapp.core.annotation.NotNull;
 import pl.javaskills.creditapp.core.annotation.ValidateCollection;
 import pl.javaskills.creditapp.core.annotation.ValidateObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Person{
+public abstract class Person implements Serializable {
+    public static final long serialVersionUID = 1l;
 
     @NotNull
     @ValidateObject
-    private final PersonalData personalData;
+    @JsonProperty
+    private PersonalData personalData;
     @NotNull
     @ValidateObject
-    private final FinanceData financeData;
+    @JsonProperty
+    private FinanceData financeData;
     @NotNull
     @ValidateObject
-    private final ContactData contactData;
+    @JsonProperty
+    private ContactData contactData;
     @NotNull
     @ValidateCollection
-    private final List<FamilyMember> familyMemberList;
+    @JsonProperty
+    private List<FamilyMember> familyMemberList;
+
+    protected Person(){}
 
     protected Person(PersonalData personalData, FinanceData financeData, ContactData contactData, List<FamilyMember> familyMemberList) {
         this.personalData = personalData;

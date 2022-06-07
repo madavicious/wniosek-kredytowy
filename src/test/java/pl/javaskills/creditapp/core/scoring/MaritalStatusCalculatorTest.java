@@ -10,7 +10,7 @@ import pl.javaskills.creditapp.core.model.PersonTestFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MaritalStatusCalculatorTest {
-    private MaritalStatusCalculator cut = new MaritalStatusCalculator();
+    private final MaritalStatusCalculator cut = new MaritalStatusCalculator();
 
     @ParameterizedTest
     @DisplayName("should return point attached to enum element")

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EducationCalculatorTest {
 
-    private EducationCalculator cut = new EducationCalculator();
+    private final EducationCalculator cut = new EducationCalculator();
 
     @ParameterizedTest
     @DisplayName("should return point attached to enum element")

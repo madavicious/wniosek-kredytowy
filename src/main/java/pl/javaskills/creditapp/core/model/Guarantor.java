@@ -1,22 +1,32 @@
 package pl.javaskills.creditapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import pl.javaskills.creditapp.core.Constants;
 import pl.javaskills.creditapp.core.annotation.Regex;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
-public class Guarantor implements Comparable<Guarantor>{
+public class Guarantor implements Comparable<Guarantor>, Serializable {
+    public static final long serialVersionUID = 1l;
 
     @NotNull
     @Regex(Constants.PESEL_REGEX)
-    private final String pesel;
+    @JsonProperty
+    private String pesel;
 
     @NotNull
-    private final Integer age;
+    @JsonProperty
+    private LocalDate birthDate;
 
-    public Guarantor(String pesel, Integer age) {
+    public Guarantor(){}
+
+    public Guarantor(String pesel, LocalDate birthDate) {
         this.pesel = pesel;
-        this.age = age;
+        this.birthDate = birthDate;
     }
 
     public String getPesel() {
@@ -24,7 +34,7 @@ public class Guarantor implements Comparable<Guarantor>{
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     @Override
@@ -32,7 +42,7 @@ public class Guarantor implements Comparable<Guarantor>{
         if(g.pesel.compareTo(this.pesel) != 0) {
             return g.pesel.compareTo(this.pesel);
         }
-        return this.age.compareTo(g.age);
+        return this.birthDate.compareTo(g.birthDate);
     }
 
     @Override
@@ -50,7 +60,7 @@ public class Guarantor implements Comparable<Guarantor>{
 
     public static class Builder{
         private String pesel;
-        private Integer age;
+        private LocalDate birthDate;
 
         private Builder(){}
         public static Builder create(){
@@ -62,13 +72,13 @@ public class Guarantor implements Comparable<Guarantor>{
             return this;
         }
 
-        public Builder withAge(int age){
-            this.age = age;
+        public Builder withAge(LocalDate birthDate){
+            this.birthDate = birthDate;
             return this;
         }
 
         public Guarantor build(){
-            return new Guarantor(pesel, age);
+            return new Guarantor(pesel, birthDate);
         }
 
     }

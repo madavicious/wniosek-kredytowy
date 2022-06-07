@@ -16,10 +16,10 @@ public class CreditApplicationValidator implements Validator {
     public CreditApplicationValidator(){}
 
     @Override
-    public void validate(LoanApplication loanApplication) throws ValidationException {
+    public void validate(LoanApplication creditApplication) throws ValidationException {
 
         try {
-            objectValidator.validate(loanApplication);
+            objectValidator.validate(creditApplication);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

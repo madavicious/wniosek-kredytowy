@@ -7,9 +7,9 @@ import pl.javaskills.creditapp.core.model.LoanApplication;
 
 public class ExpensesPostValidator implements PostValidator{
     @Override
-    public void validate(LoanApplication loanApplication, int scoring, double rating) throws RequirementNotMetException {
-        double balance = loanApplication.getPerson().getBalance();
-        double personalExpenses = loanApplication.getPerson().getFinanceData().getSumOfExpenses(ExpenseType.PERSONAL);
+    public void validate(LoanApplication creditApplication, int scoring, double rating) throws RequirementNotMetException {
+        double balance = creditApplication.getPerson().getBalance();
+        double personalExpenses = creditApplication.getPerson().getFinanceData().getSumOfExpenses(ExpenseType.PERSONAL);
 
         double percentage = personalExpenses * 100 / balance;
 

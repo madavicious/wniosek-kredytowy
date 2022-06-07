@@ -54,11 +54,11 @@ class CreditApplicationServiceTest {
     @DisplayName("should return NEGATIVE_SCORING when scoring is < 300")
     public void test1() {
         //given
-        LoanApplication loanApplication = CreditApplicationTestFactory.create();
-        BDDMockito.given(scoringCalculatorMock.calculate(eq(loanApplication))).willReturn(100);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create();
+        BDDMockito.given(scoringCalculatorMock.calculate(eq(creditApplication))).willReturn(100);
 
         //when
-        final CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        final CreditApplicationDecision decision = cut.getDecision(creditApplication);
         //then
         assertEquals(DecisionType.NEGATIVE_SCORING, decision.getType());
     }
@@ -67,11 +67,11 @@ class CreditApplicationServiceTest {
     @DisplayName("should return CONTACT_REQUIRED when scoring is <= 400")
     public void test2() {
         //given
-        LoanApplication loanApplication = CreditApplicationTestFactory.create();
-        BDDMockito.given(scoringCalculatorMock.calculate(eq(loanApplication))).willReturn(350);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create();
+        BDDMockito.given(scoringCalculatorMock.calculate(eq(creditApplication))).willReturn(350);
 
         //when
-        final CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        final CreditApplicationDecision decision = cut.getDecision(creditApplication);
         //then
         assertEquals(DecisionType.CONTACT_REQUIRED, decision.getType());
     }
@@ -80,13 +80,13 @@ class CreditApplicationServiceTest {
     @DisplayName("should return NEGATIVE_RATING when scoring is > 400 and credit rating > expected loan amount")
     public void test3() {
         //given
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(190000.00);
-        BDDMockito.given(scoringCalculatorMock.calculate(eq(loanApplication))).willReturn(450);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(190000.00);
+        BDDMockito.given(scoringCalculatorMock.calculate(eq(creditApplication))).willReturn(450);
 
-        BDDMockito.given(creditRatingCalculatorMock.calculate(eq(loanApplication))).willReturn(189000.0);
+        BDDMockito.given(creditRatingCalculatorMock.calculate(eq(creditApplication))).willReturn(189000.0);
 
         //when
-        final CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        final CreditApplicationDecision decision = cut.getDecision(creditApplication);
         //then
         assertEquals(DecisionType.NEGATIVE_RATING, decision.getType());
     }
@@ -95,12 +95,12 @@ class CreditApplicationServiceTest {
     @DisplayName("should return POSITIVE when scoring is > 400 and credit rating <= expected loan amount")
     public void test4() {
         //given
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(150000.00);
-        BDDMockito.given(scoringCalculatorMock.calculate(eq(loanApplication))).willReturn(450);
-        BDDMockito.given(creditRatingCalculatorMock.calculate(eq(loanApplication))).willReturn(151000.0);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(150000.00);
+        BDDMockito.given(scoringCalculatorMock.calculate(eq(creditApplication))).willReturn(450);
+        BDDMockito.given(creditRatingCalculatorMock.calculate(eq(creditApplication))).willReturn(151000.0);
 
         //when
-        final CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        final CreditApplicationDecision decision = cut.getDecision(creditApplication);
         //then
         assertEquals(DecisionType.POSITIVE, decision.getType());
     }

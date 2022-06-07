@@ -1,8 +1,11 @@
 package pl.javaskills.creditapp.client;
 
 import org.jetbrains.annotations.NotNull;
+import pl.javaskills.creditapp.core.Constants;
 import pl.javaskills.creditapp.core.model.*;
 
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -41,7 +44,7 @@ public class ConsoleReader implements CreditAplicationReader{
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(purposeOfLoanType, amount, period);
         FinanceData financeData = new FinanceData(sourcesOfIncome);
 
-        return new LoanApplication(NaturalPerson.Builder.create()
+        return new LoanApplication(Locale.US, ZoneId.of("Europe/Warsaw"), NaturalPerson.Builder.create()
                 .withPersonalData(PersonalData.Builder.create()
                         .withName(name)
                         .withLastName(lastName)

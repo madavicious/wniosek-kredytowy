@@ -1,20 +1,31 @@
 package pl.javaskills.creditapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
+import pl.javaskills.creditapp.core.Constants;
 import pl.javaskills.creditapp.core.annotation.Regex;
 
-public class FamilyMember implements Comparable<FamilyMember>{
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
+
+public class FamilyMember implements Comparable<FamilyMember>, Serializable {
+    public static final long serialVersionUID = 1l;
 
     @NotNull
     @Regex(Constants.NAME_REGEX)
-    private final String name;
+    @JsonProperty
+    private String name;
 
     @NotNull
-    private final Integer age;
+    @JsonProperty
+    private LocalDate birthDate;
 
-    public FamilyMember(String name, Integer age) {
+    public FamilyMember(){}
+
+    public FamilyMember(String name, LocalDate birthDate) {
         this.name = name;
-        this.age = age;
+        this.birthDate = birthDate;
     }
 
     public String getName() {
@@ -22,17 +33,17 @@ public class FamilyMember implements Comparable<FamilyMember>{
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     @Override
     public int compareTo(@NotNull FamilyMember o) {
-        return o.age.compareTo(age);
+        return o.birthDate.compareTo(birthDate);
     }
 
     @Override
     public String toString() {
-        return "FamilyMember [age=" + age + ", name=" + name + "]";
+        return "FamilyMember [birth date=" + birthDate + ", name=" + name + "]";
     }
 
     

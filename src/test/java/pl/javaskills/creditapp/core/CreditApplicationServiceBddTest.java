@@ -11,6 +11,7 @@ import pl.javaskills.creditapp.core.scoring.IncomeCalculator;
 import pl.javaskills.creditapp.core.scoring.MaritalStatusCalculator;
 import pl.javaskills.creditapp.core.validation.*;
 import pl.javaskills.creditapp.core.validation.reflection.*;
+import pl.javaskills.creditapp.util.AgeUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,19 +25,37 @@ class CreditApplicationServiceBddTest {
     private IncomeCalculator incomeCalculator = new IncomeCalculator();
     private SelfEmployedScoringCalculator selfEmployedScoringCalculator = new SelfEmployedScoringCalculator();
     private GuarantorsCalculator guarantorsCalculator = new GuarantorsCalculator();
-    private PersonScoringCalculatorFactory personScoringCalculatorFactory = new PersonScoringCalculatorFactory(selfEmployedScoringCalculator, educationCalculator, maritalStatusCalculator, incomeCalculator, guarantorsCalculator);
-    private CompoundPostValidator compoundPostValidator = new CompoundPostValidator(new PurposeOfLoanPostValidator(), new ExpensesPostValidator());
+    //private BikApi bankApiMock = Mockito.mock(BikApi.class);
+    //private BikScoringCalculator bikScoringCalculator = new BikScoringCalculator(bankApiMock);
+    private PersonScoringCalculatorFactory personScoringCalculatorFactory = new PersonScoringCalculatorFactory(
+            selfEmployedScoringCalculator, educationCalculator, maritalStatusCalculator, incomeCalculator,
+            guarantorsCalculator
+            //bikScoringCalculator
+    );
+    private CompoundPostValidator compoundPostValidator = new CompoundPostValidator(new PurposeOfLoanPostValidator(),
+            new ExpensesPostValidator());
     List<FieldAnnotationProcessor> fieldProcessors = List.of(new NotNullAnnotationProcessor(), new RegexAnnotationProcessor());
     List<ClassAnnotationProcessor> classProcessors = List.of(new ExactlyOneNotNullAnnotationProcessor());
     final ObjectValidator objectValidator = new ObjectValidator(fieldProcessors, classProcessors);
     CreditApplicationValidator creditApplicationValidator = new CreditApplicationValidator(objectValidator);
-    private CreditApplicationService cut = new CreditApplicationService(personScoringCalculatorFactory, new CreditRatingCalculator(), creditApplicationValidator, compoundPostValidator);
+    private final CreditApplicationService cut = new CreditApplicationService(personScoringCalculatorFactory,
+            new CreditRatingCalculator(), creditApplicationValidator, compoundPostValidator);
+/*
+    @BeforeEach
+    public void init(){
+        ScoringResponse res = new ScoringResponse();
+        res.setScoring(0);
+        BDDMockito.given(bankApiMock.getScoring(any(ScoringRequest.class))).willReturn(res);
+    }
+
+ */
 
     @Test
     @DisplayName("should return Decision is NEGATIVE_REQUIREMENTS_NOT_MET, min loan amount  requirement is not met")
     public void test1() {
         //given
-        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember("John",18));
+        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember(
+                "John", AgeUtils.generateBirthDate(18)));
         NaturalPerson person = NaturalPerson.Builder
                 .create()
                 .withPesel("12312312312")
@@ -57,10 +76,10 @@ class CreditApplicationServiceBddTest {
                 .withFinanceData(new FinanceData(new SourceOfIncome(IncomeType.SELF_EMPLOYMENT, 10000.00)))
                 .build();
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(PurposeOfLoanType.MORTGAGE, 50000.00, 30);
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
 
         //when
-        CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        CreditApplicationDecision decision = cut.getDecision(creditApplication);
 
         //then
         assertEquals(DecisionType.NEGATIVE_REQUIREMENTS_NOT_MET, decision.getType());
@@ -73,7 +92,7 @@ class CreditApplicationServiceBddTest {
     @DisplayName("should return Decision is negative, when years since founded <2")
     public void test2() {
         //given
-        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember("John",18));
+        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember("John",AgeUtils.generateBirthDate(18)));
         SelfEmployed person = SelfEmployed.Builder
                 .create()
                 .withNip("123123")
@@ -95,10 +114,10 @@ class CreditApplicationServiceBddTest {
                 .withYearsSinceFounded(1)
                 .build();
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(PurposeOfLoanType.MORTGAGE, 500000.00, 30);
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
 
         //when
-        CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        CreditApplicationDecision decision = cut.getDecision(creditApplication);
 
         //then
         assertEquals(DecisionType.NEGATIVE_SCORING, decision.getType());
@@ -109,7 +128,7 @@ class CreditApplicationServiceBddTest {
     @DisplayName("should return Decision is contact required, when years since founded >=2")
     public void test3() {
         //given
-        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember("John",18));
+        List<FamilyMember> familyMemberList = Arrays.asList(new FamilyMember("John",AgeUtils.generateBirthDate(18)));
         SelfEmployed person = SelfEmployed.Builder
                 .create()
                 .withNip("123123")
@@ -131,10 +150,10 @@ class CreditApplicationServiceBddTest {
                 .withYearsSinceFounded(3)
                 .build();
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(PurposeOfLoanType.MORTGAGE, 500000.00, 30);
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
 
         //when
-        CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        CreditApplicationDecision decision = cut.getDecision(creditApplication);
 
         //then
         assertEquals(DecisionType.CONTACT_REQUIRED, decision.getType());
@@ -167,10 +186,10 @@ class CreditApplicationServiceBddTest {
                 .withYearsSinceFounded(3)
                 .build();
         PurposeOfLoan purposeOfLoan = new PurposeOfLoan(PurposeOfLoanType.MORTGAGE, 500000.00, 30);
-        LoanApplication loanApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
+        LoanApplication creditApplication = CreditApplicationTestFactory.create(person, purposeOfLoan);
 
         //when
-        CreditApplicationDecision decision = cut.getDecision(loanApplication);
+        CreditApplicationDecision decision = cut.getDecision(creditApplication);
 
         //then
         assertEquals(DecisionType.NEGATIVE_REQUIREMENTS_NOT_MET, decision.getType());

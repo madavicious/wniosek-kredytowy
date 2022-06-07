@@ -2,7 +2,8 @@ package pl.javaskills.creditapp.core.model;
 
 import java.util.Comparator;
 
-public class FamilyMemberNameComparator implements Comparator<FamilyMember> {
+public class FamilyMemberNameComparator implements Comparator<FamilyMember>{
+
 
     @Override
     public int compare(FamilyMember o1, FamilyMember o2){

@@ -1,16 +1,33 @@
 package pl.javaskills.creditapp.core.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.javaskills.creditapp.core.annotation.ExacltyOneNotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ExacltyOneNotNull({"nip", "regon"})
-public class SelfEmployed extends Person{
-    private final String nip;
-    private final String regon;
-    private final int yearsSinceFounded;
-    private final List<FamilyMember> familyMemberList;
+public class SelfEmployed extends Person implements Serializable {
+    public static final long serialVersionUID = 1l;
+    @JsonProperty
+    private String nip;
+    @JsonProperty
+    private String regon;
+    @JsonProperty
+    private int yearsSinceFounded;
+    @JsonProperty
+    private List<FamilyMember> familyMemberList;
+
+    public String getNip() {
+        return nip;
+    }
+
+    public String getRegon() {
+        return regon;
+    }
+
+    public SelfEmployed(){}
 
     private SelfEmployed(String nip, String regon, PersonalData personalData, FinanceData financeData,
                          ContactData contactData, int yearsSinceFounded, List<FamilyMember> familyMemberList) {

@@ -7,8 +7,8 @@ import pl.javaskills.creditapp.core.model.SelfEmployed;
 
 public interface ScoringCalculator {
 
-    default int calculate(LoanApplication loanApplication){
-        return calculate(loanApplication.getPerson());
+    default int calculate(LoanApplication creditApplication){
+        return calculate(creditApplication.getPerson());
     }
 
     default int calculate(Person person) {

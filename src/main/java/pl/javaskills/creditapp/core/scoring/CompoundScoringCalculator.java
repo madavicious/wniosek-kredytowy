@@ -14,11 +14,11 @@ public class CompoundScoringCalculator implements ScoringCalculator {
     }
 
     @Override
-    public int calculate(LoanApplication loanApplication){
+    public int calculate(LoanApplication creditApplication){
         int scoring = 0;
 
         for(ScoringCalculator calculator : calculators) {
-            scoring += calculator.calculate(loanApplication);
+            scoring += calculator.calculate(creditApplication);
         }
         log.info("Calculated scoring = " + scoring + " points");
         return scoring;

@@ -17,25 +17,25 @@ import static org.mockito.ArgumentMatchers.eq;
 @ExtendWith(MockitoExtension.class)
 class CompoundScoringCalculatorTest {
 
-    private ScoringCalculator calculator1Mock = Mockito.mock(ScoringCalculator.class);
-    private ScoringCalculator calculator2Mock = Mockito.mock(ScoringCalculator.class);
-    private ScoringCalculator calculator3Mock = Mockito.mock(ScoringCalculator.class);
-    private CompoundScoringCalculator cut = new CompoundScoringCalculator(calculator1Mock, calculator2Mock, calculator3Mock);
+    private final ScoringCalculator calculator1Mock = Mockito.mock(ScoringCalculator.class);
+    private final ScoringCalculator calculator2Mock = Mockito.mock(ScoringCalculator.class);
+    private final ScoringCalculator calculator3Mock = Mockito.mock(ScoringCalculator.class);
+    private final CompoundScoringCalculator cut = new CompoundScoringCalculator(calculator1Mock, calculator2Mock, calculator3Mock);
 
 
     @Test
     @DisplayName("should return sum of calculations")
     public void test1() {
         //given
-        LoanApplication loanApplication = CreditApplicationTestFactory.create();
-        BDDMockito.given(calculator1Mock.calculate(eq(loanApplication)))
+        LoanApplication creditApplication = CreditApplicationTestFactory.create();
+        BDDMockito.given(calculator1Mock.calculate(eq(creditApplication)))
                 .willReturn(100);
-        BDDMockito.given(calculator2Mock.calculate(eq(loanApplication)))
+        BDDMockito.given(calculator2Mock.calculate(eq(creditApplication)))
                 .willReturn(200);
-        BDDMockito.given(calculator3Mock.calculate(eq(loanApplication)))
+        BDDMockito.given(calculator3Mock.calculate(eq(creditApplication)))
                 .willReturn(50);
         //when
-        int scoring = cut.calculate(loanApplication);
+        int scoring = cut.calculate(creditApplication);
         //then
         assertEquals(350, scoring);
     }

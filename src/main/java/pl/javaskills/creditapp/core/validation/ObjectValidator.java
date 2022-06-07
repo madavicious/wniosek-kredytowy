@@ -26,11 +26,13 @@ public class ObjectValidator {
     }
 
     public void validate(Object object) throws IllegalAccessException, ValidationException {
-        final Class aClass = object.getClass();
-        final Class superClass = object.getClass().getSuperclass();
-        log.debug("Starting validation of class " +aClass.getSimpleName());
-        processClass(object, aClass);
-        processClass(object, superClass);
+        if(object != null) {
+            final Class aClass = object.getClass();
+            final Class superClass = object.getClass().getSuperclass();
+            log.debug("Starting validation of class " + aClass.getSimpleName());
+            processClass(object, aClass);
+            processClass(object, superClass);
+        }
     }
 
     private void processClass(Object object, Class aClass) throws IllegalAccessException, ValidationException {

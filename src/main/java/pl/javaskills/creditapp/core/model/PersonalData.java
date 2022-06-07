@@ -1,23 +1,29 @@
 package pl.javaskills.creditapp.core.model;
 
+import pl.javaskills.creditapp.core.Constants;
 import pl.javaskills.creditapp.core.annotation.NotNull;
 import pl.javaskills.creditapp.core.annotation.Regex;
 
-public class PersonalData {
+import java.io.Serializable;
+
+public class PersonalData implements Serializable {
+    public static final long serialVersionUID = 1l;
 
     @NotNull
     @Regex(Constants.NAME_REGEX)
-    private final String name;
+    private String name;
     @NotNull
     @Regex(Constants.LAST_NAME_REGEX)
-    private final String lastName;
+    private String lastName;
     @NotNull
     @Regex(Constants.LAST_NAME_REGEX)
-    private final String mothersMaidenName;
+    private String mothersMaidenName;
     @NotNull
-    private final MaritalStatus maritalStatus;
+    private MaritalStatus maritalStatus;
     @NotNull
-    private final Education education;
+    private Education education;
+
+    public PersonalData(){}
 
     private PersonalData(String name, String lastName, String mothersMaidenName, MaritalStatus maritalStatus, Education education) {
         this.name = name;

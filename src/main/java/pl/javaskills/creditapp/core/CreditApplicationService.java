@@ -12,6 +12,9 @@ import pl.javaskills.creditapp.core.validation.CompoundPostValidator;
 import pl.javaskills.creditapp.core.validation.CreditApplicationValidator;
 import pl.javaskills.creditapp.di.Inject;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import static pl.javaskills.creditapp.core.DecisionType.*;
 
 public class CreditApplicationService {
@@ -36,28 +39,28 @@ public class CreditApplicationService {
     public CreditApplicationService(){}
 
 
-    public CreditApplicationDecision getDecision (LoanApplication loanApplication) {
-        String id = loanApplication.getId().toString();
+    public CreditApplicationDecision getDecision (LoanApplication creditApplication) {
+        String id = creditApplication.getId().toString();
         MDC.put("id", id);
-
+        Instant start = Instant.now();
         try {
-            Person person = loanApplication.getPerson();
+            Person person = creditApplication.getPerson();
             //step1
-            creditApplicationValidator.validate(loanApplication);
+            creditApplicationValidator.validate(creditApplication);
 
             //step2
-            int scoring = personScoringCalculatorFactory.getCalculator(person).calculate(loanApplication);
+            int scoring = personScoringCalculatorFactory.getCalculator(person).calculate(creditApplication);
 
             //step3
-            double creditRate = creditRatingCalculator.calculate(loanApplication);
+            double creditRate = creditRatingCalculator.calculate(creditApplication);
 
             //step4
             try {
-                compoundPostValidator.validate(loanApplication, scoring, creditRate);
+                compoundPostValidator.validate(creditApplication, scoring, creditRate);
             } catch (RequirementNotMetException reqEx) {
                  return new CreditApplicationDecision(NEGATIVE_REQUIREMENTS_NOT_MET, person.getPersonalData(), creditRate, scoring, reqEx.getRequirementNotMetCause());
             }
-            CreditApplicationDecision decision = getCreditApplicationDecision(loanApplication, person, scoring, creditRate);
+            CreditApplicationDecision decision = getCreditApplicationDecision(creditApplication, person, scoring, creditRate);
             log.info("Decision = " + decision.getType());
             return decision;
         }catch (ValidationException validationException){
@@ -67,19 +70,21 @@ public class CreditApplicationService {
             exception.printStackTrace();
             throw new IllegalStateException();
         } finally {
-            log.info("Application processing is finished");
+            long ms1 = Duration.between(start, Instant.now()).toMillis();
+            long ms2 = 0;
+            log.info("Application processing is finished. Took {}/{} ms", ms1, ms2);
         }
     }
 
     @NotNull
-    private CreditApplicationDecision getCreditApplicationDecision(LoanApplication loanApplication, Person person, int scoring, double creditRate) {
+    private CreditApplicationDecision getCreditApplicationDecision(LoanApplication creditApplication, Person person, int scoring, double creditRate) {
         CreditApplicationDecision decision;
         if (scoring < 300) {
             decision = new CreditApplicationDecision(NEGATIVE_SCORING, person.getPersonalData(), creditRate, scoring);
         } else if (scoring >= 300 && scoring <= 400) {
             decision = new CreditApplicationDecision(CONTACT_REQUIRED, person.getPersonalData(), creditRate, scoring);
         } else {
-            if (creditRate >= loanApplication.getPurposeOfLoan().getAmount()) {
+            if (creditRate >= creditApplication.getPurposeOfLoan().getAmount()) {
                 decision = new CreditApplicationDecision(POSITIVE, person.getPersonalData(), creditRate, scoring);
             } else {
                 decision = new CreditApplicationDecision(NEGATIVE_RATING, person.getPersonalData(), creditRate, scoring);

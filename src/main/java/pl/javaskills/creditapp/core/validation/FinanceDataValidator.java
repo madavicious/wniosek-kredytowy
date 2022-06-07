@@ -8,7 +8,7 @@ import pl.javaskills.creditapp.core.model.LoanApplication;
 public class FinanceDataValidator implements Validator{
     
     @Override
-    public void validate(LoanApplication loanApplication) throws ValidationException {
-        FinanceData financeData = loanApplication.getPerson().getFinanceData();
+    public void validate(LoanApplication creditApplication) throws ValidationException {
+        FinanceData financeData = creditApplication.getPerson().getFinanceData();
     }
 }

@@ -11,10 +11,10 @@ public class GuarantorsCalculator implements ScoringCalculator{
     private final Logger log = LoggerFactory.getLogger(GuarantorsCalculator.class);
 
     @Override
-    public int calculate(LoanApplication loanApplication){
+    public int calculate(LoanApplication creditApplication){
         int scoringAgeUnder40 = 0;
         int scoringOthers = 0;
-        for (Guarantor g : loanApplication.getGuarantors()){
+        for (Guarantor g : creditApplication.getGuarantors()){
             if (g.getAge() < 40){
                 scoringAgeUnder40 += 50;
             } else{
